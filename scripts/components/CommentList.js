@@ -11,12 +11,11 @@ module.exports = React.createClass({
 					<div key={commentModel.cid}>{commentModel.get("text")}</div>
 				);
 		});
-
-		return (
-			<div>
-				{commentToPost}
-			</div>
-			);
+		if(commentToPost.length === 0){
+			return (<div>{commentToPost}</div>);
+		} else {
+			return (<div className="well change-color">{commentToPost}</div>);
+		}
 	},
 	addToComments: function(){
 		this.forceUpdate();

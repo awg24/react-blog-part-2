@@ -6,8 +6,8 @@ module.exports = React.createClass({
 		return (
 			<div>
 				<form onSubmit={this.addComment}>
-					<input ref="commentInput" type="type"/>
-					<button>Add Comment</button>
+					<input className="smallspace" ref="commentInput" type="type"/>
+					<button className="btn btn-primary btn-sm">Add Comment</button>
 				</form>
 			</div>
 			);

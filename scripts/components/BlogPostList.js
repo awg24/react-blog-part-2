@@ -14,7 +14,7 @@ module.exports = React.createClass({
 	render: function(){
 		var that = this;
 		var blogPost = this.props.posts.map(function(postModel){
-			return <div id={postModel.get("id")} key={postModel.cid}>
+			return <div className="container well stretch text-center" id={postModel.get("id")} key={postModel.cid}>
 						<h3>{postModel.get("title")}</h3>
 						<p>{postModel.get("body")}</p>
 						<CommentForm blogID={postModel.get("id")} postComment={that.postComment}/>

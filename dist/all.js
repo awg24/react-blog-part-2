@@ -32550,7 +32550,7 @@ module.exports = React.createClass({
 			null,
 			React.createElement(
 				"form",
-				{ onSubmit: this.addBlogPost },
+				{ className: "box", onSubmit: this.addBlogPost },
 				"Title: ",
 				React.createElement("input", { ref: "blogTitle", type: "type" }),
 				React.createElement("br", null),
@@ -32588,7 +32588,7 @@ module.exports = React.createClass({
 				React.createElement("br", null),
 				React.createElement(
 					"button",
-					null,
+					{ className: "btn btn-primary" },
 					"Post"
 				)
 			),
@@ -32637,7 +32637,7 @@ module.exports = React.createClass({
 		var blogPost = this.props.posts.map(function (postModel) {
 			return React.createElement(
 				"div",
-				{ id: postModel.get("id"), key: postModel.cid },
+				{ className: "container well stretch text-center", id: postModel.get("id"), key: postModel.cid },
 				React.createElement(
 					"h3",
 					null,
@@ -32683,10 +32683,10 @@ module.exports = React.createClass({
 			React.createElement(
 				"form",
 				{ onSubmit: this.addComment },
-				React.createElement("input", { ref: "commentInput", type: "type" }),
+				React.createElement("input", { className: "smallspace", ref: "commentInput", type: "type" }),
 				React.createElement(
 					"button",
-					null,
+					{ className: "btn btn-primary btn-sm" },
 					"Add Comment"
 				)
 			)
@@ -32723,12 +32723,19 @@ module.exports = React.createClass({
 				commentModel.get("text")
 			);
 		});
-
-		return React.createElement(
-			"div",
-			null,
-			commentToPost
-		);
+		if (commentToPost.length === 0) {
+			return React.createElement(
+				"div",
+				null,
+				commentToPost
+			);
+		} else {
+			return React.createElement(
+				"div",
+				{ className: "well change-color" },
+				commentToPost
+			);
+		}
 	},
 	addToComments: function addToComments() {
 		this.forceUpdate();

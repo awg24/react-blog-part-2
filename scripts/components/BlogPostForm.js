@@ -9,7 +9,7 @@ module.exports = React.createClass({
 	render: function(){
 		return (
 			<div>
-				<form onSubmit={this.addBlogPost}>
+				<form className="box" onSubmit={this.addBlogPost}>
 					Title: <input ref="blogTitle" type="type"/><br/><br/>
 					Body: <textarea ref="blogBody"></textarea><br/><br/>
 					Category: <select ref="blogCateogry">
@@ -18,7 +18,7 @@ module.exports = React.createClass({
 								<option>Thing3</option>
 								<option>Thing4</option>
 							  </select><br/><br/>
-					<button>Post</button>
+					<button className="btn btn-primary">Post</button>
 				</form><br/><br/>
 				<BlogPostList posts={blogPosts}/>
 			</div>

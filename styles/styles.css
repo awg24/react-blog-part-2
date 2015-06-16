@@ -1,0 +1,25 @@
+.box {
+	display: block;
+	width: 250px;
+	margin-left: auto;
+	margin-right: auto;
+}
+body {
+	background: LightGray;
+}
+.stretch {
+	width: 100%;
+}
+p {
+	word-wrap: break-word;
+}
+.smallspace {
+	margin-right: 15px;
+}
+.change-color {
+	margin-left: auto;
+	margin-right: auto;
+	word-wrap: break-word;
+	width: 400px;
+	background: white;
+}
