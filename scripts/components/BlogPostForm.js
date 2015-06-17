@@ -21,7 +21,7 @@ module.exports = React.createClass({
 							  </select><br/><br/>
 					<button className="btn btn-primary">Post</button>
 				</form><br/><br/>
-				<BlogPostList setLimit={myLimit} posts={blogPosts}/>
+				<BlogPostList user={this.props.user} setLimit={myLimit} posts={blogPosts}/>
 			</div>
 			);
 	},
@@ -33,7 +33,7 @@ module.exports = React.createClass({
 			body: this.refs.blogBody.getDOMNode().value,
 			category: this.refs.blogCateogry.getDOMNode().value,
 			createdAt: new Date(),
-			postOwner: 1,
+			postOwner: this.props.user,
 		});
 		this.newPost(blogPost);
 		blogCount++;

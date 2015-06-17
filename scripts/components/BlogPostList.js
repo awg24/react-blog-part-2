@@ -19,9 +19,13 @@ module.exports = React.createClass({
 	},
 	render: function(){
 		var that = this;
-		var sortedModels = this.props.posts.sortBy(function(model){
+
+		var userSpecificModel = this.props.posts.where({postOwner: this.props.user});
+
+		var sortedModels = _.sortBy(userSpecificModel,function(model){
 			return -1*model.get("createdAt").getTime();
 		});
+		
 		var topNModels = _.first(sortedModels, this.state.number);
 
 		var blogPost = topNModels.map(function(postModel){
@@ -33,6 +37,7 @@ module.exports = React.createClass({
 						<CommentList blogID={postModel.get("id")} comments={commentCollection}/>
 				  </div>
 		});
+
 		var limiter = this.props.setLimit.map(function(limit){
 			return (<option key={limit}>{limit}</option>);
 		});
@@ -44,7 +49,7 @@ module.exports = React.createClass({
 				</select> Choose most recent amount of posts
 				{blogPost}
 			</div>
-			);
+		);
 	},
 	postsAdded: function(){
 		this.forceUpdate();

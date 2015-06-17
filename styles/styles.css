@@ -5,7 +5,7 @@
 	margin-right: auto;
 }
 body {
-	background: LightGray;
+	background: #D83018;
 }
 .stretch {
 	width: 100%;
@@ -22,4 +22,18 @@ p {
 	word-wrap: break-word;
 	width: 400px;
 	background: white;
+}
+.small-img {
+	height: 30px;
+	width: 30px;
+}
+.panel {
+	width: 250px;
+	margin-left: auto;
+	margin-right: auto;
+	background: #3A3232;
+	color: white;
+}
+.panel-signup {
+	width: 250px;
 }

@@ -32519,7 +32519,7 @@ module.exports = Backbone.Collection.extend({
 	model: BlogPostModel
 });
 
-},{"../models/BlogPostModel":167,"backbone":1,"jquery":4}],161:[function(require,module,exports){
+},{"../models/BlogPostModel":170,"backbone":1,"jquery":4}],161:[function(require,module,exports){
 "use strict";
 
 var $ = require("jquery");
@@ -32531,7 +32531,19 @@ module.exports = Backbone.Collection.extend({
 	model: CommentModel
 });
 
-},{"../models/CommentModel":168,"backbone":1,"jquery":4}],162:[function(require,module,exports){
+},{"../models/CommentModel":171,"backbone":1,"jquery":4}],162:[function(require,module,exports){
+"use strict";
+
+var $ = require("jquery");
+var Backbone = require("backbone");
+Backbone.$ = $;
+var UserModel = require("../models/UserModel");
+
+module.exports = Backbone.Collection.extend({
+	model: UserModel
+});
+
+},{"../models/UserModel":172,"backbone":1,"jquery":4}],163:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -32595,7 +32607,7 @@ module.exports = React.createClass({
 			),
 			React.createElement("br", null),
 			React.createElement("br", null),
-			React.createElement(BlogPostList, { setLimit: myLimit, posts: blogPosts })
+			React.createElement(BlogPostList, { user: this.props.user, setLimit: myLimit, posts: blogPosts })
 		);
 	},
 	addBlogPost: function addBlogPost(event) {
@@ -32606,7 +32618,7 @@ module.exports = React.createClass({
 			body: this.refs.blogBody.getDOMNode().value,
 			category: this.refs.blogCateogry.getDOMNode().value,
 			createdAt: new Date(),
-			postOwner: 1
+			postOwner: this.props.user
 		});
 		this.newPost(blogPost);
 		blogCount++;
@@ -32616,7 +32628,7 @@ module.exports = React.createClass({
 	}
 });
 
-},{"../collections/BlogPostCollection":160,"../models/BlogPostModel":167,"./BlogPostList":163,"react":159}],163:[function(require,module,exports){
+},{"../collections/BlogPostCollection":160,"../models/BlogPostModel":170,"./BlogPostList":164,"react":159}],164:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -32642,9 +32654,13 @@ module.exports = React.createClass({
 	},
 	render: function render() {
 		var that = this;
-		var sortedModels = this.props.posts.sortBy(function (model) {
+
+		var userSpecificModel = this.props.posts.where({ postOwner: this.props.user });
+
+		var sortedModels = _.sortBy(userSpecificModel, function (model) {
 			return -1 * model.get("createdAt").getTime();
 		});
+
 		var topNModels = _.first(sortedModels, this.state.number);
 
 		var blogPost = topNModels.map(function (postModel) {
@@ -32666,6 +32682,7 @@ module.exports = React.createClass({
 				React.createElement(CommentList, { blogID: postModel.get("id"), comments: commentCollection })
 			);
 		});
+
 		var limiter = this.props.setLimit.map(function (limit) {
 			return React.createElement(
 				"option",
@@ -32700,7 +32717,7 @@ module.exports = React.createClass({
 	}
 });
 
-},{"../collections/BlogPostCollection":160,"../collections/CommentCollection":161,"../models/BlogPostModel":167,"./CommentForm":164,"./CommentList":165,"backbone/node_modules/underscore":2,"react":159}],164:[function(require,module,exports){
+},{"../collections/BlogPostCollection":160,"../collections/CommentCollection":161,"../models/BlogPostModel":170,"./CommentForm":165,"./CommentList":166,"backbone/node_modules/underscore":2,"react":159}],165:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -32736,7 +32753,7 @@ module.exports = React.createClass({
 	}
 });
 
-},{"../models/CommentModel":168,"react":159}],165:[function(require,module,exports){
+},{"../models/CommentModel":171,"react":159}],166:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -32775,21 +32792,252 @@ module.exports = React.createClass({
 	}
 });
 
-},{"react":159}],166:[function(require,module,exports){
+},{"react":159}],167:[function(require,module,exports){
+"use strict";
+
+var React = require("react");
+var Backbone = require("backbone");
+Backbone.$ = require("jquery");
+
+module.exports = React.createClass({
+	displayName: "exports",
+
+	render: function render() {
+		return React.createElement(
+			"div",
+			{ className: "panel panel-danger" },
+			React.createElement(
+				"div",
+				{ className: "panel-heading" },
+				"Login"
+			),
+			React.createElement(
+				"div",
+				{ className: "panel-body" },
+				React.createElement(
+					"form",
+					{ className: "form-inline" },
+					React.createElement(
+						"div",
+						{ className: "form-group" },
+						React.createElement(
+							"label",
+							{ htmlFor: "inputEmail3", className: "col-sm-2 control-label" },
+							"Email/Username"
+						),
+						React.createElement("br", null),
+						React.createElement(
+							"div",
+							{ className: "col-sm-10" },
+							React.createElement("input", { type: "email", ref: "username", className: "form-control", id: "inputEmail3", placeholder: "Email/Username" })
+						)
+					),
+					React.createElement(
+						"div",
+						{ className: "form-group" },
+						React.createElement(
+							"label",
+							{ htmlFor: "inputPassword3", className: "col-sm-2 control-label" },
+							"Password"
+						),
+						React.createElement("br", null),
+						React.createElement(
+							"div",
+							{ className: "col-sm-10" },
+							React.createElement("input", { type: "password", className: "form-control", id: "inputPassword3", placeholder: "Password" })
+						)
+					),
+					React.createElement("br", null),
+					React.createElement("br", null),
+					React.createElement(
+						"div",
+						{ className: "form-group" },
+						React.createElement(
+							"div",
+							{ className: "col-sm-5" },
+							React.createElement(
+								"button",
+								{ type: "submit", className: "btn btn-default", onClick: this.goToBlog },
+								"Sign in"
+							)
+						),
+						React.createElement(
+							"div",
+							{ className: "col-sm-5" },
+							React.createElement(
+								"button",
+								{ type: "submit", className: "btn btn-default", onClick: this.goToNewUserSignUp },
+								"New User"
+							)
+						)
+					)
+				)
+			)
+		);
+	},
+	goToBlog: function goToBlog(event) {
+		event.preventDefault();
+		this.props.goTo.navigate("blog/" + this.refs.username.getDOMNode().value, { trigger: true });
+	},
+	goToNewUserSignUp: function goToNewUserSignUp(event) {
+		event.preventDefault();
+		this.props.goTo.navigate("newMember", { trigger: true });
+	}
+
+});
+
+},{"backbone":1,"jquery":4,"react":159}],168:[function(require,module,exports){
+"use strict";
+
+var React = require("react");
+var Backbone = require("backbone");
+Backbone.$ = require("jquery");
+var UserModel = require("../models/UserModel");
+var UserCollection = require("../collections/UserCollection");
+var userCollection = new UserCollection();
+
+module.exports = React.createClass({
+	displayName: "exports",
+
+	render: function render() {
+		return React.createElement(
+			"div",
+			{ className: "panel panel-signup panel-danger" },
+			React.createElement(
+				"div",
+				{ className: "panel-heading" },
+				"Sign Up"
+			),
+			React.createElement(
+				"div",
+				{ className: "panel-body" },
+				React.createElement(
+					"form",
+					{ className: "form-inline" },
+					React.createElement(
+						"div",
+						{ className: "form-group text-left" },
+						React.createElement(
+							"label",
+							{ htmlFor: "inputEmail3", className: "col-sm-12 control-label" },
+							"Enter Email"
+						),
+						React.createElement(
+							"div",
+							{ className: "col-sm-10" },
+							React.createElement("input", { ref: "newUserEmail", type: "email", className: "form-control", id: "inputEmail3", placeholder: "Email" })
+						),
+						React.createElement(
+							"label",
+							{ htmlFor: "inputEmail3", className: "col-sm-12 control-label" },
+							"Enter Username"
+						),
+						React.createElement(
+							"div",
+							{ className: "col-sm-10" },
+							React.createElement("input", { ref: "newUsername", type: "email", className: "form-control", id: "inputEmail3", placeholder: "Username" })
+						)
+					),
+					React.createElement("br", null),
+					React.createElement("br", null),
+					React.createElement(
+						"div",
+						{ className: "form-group" },
+						React.createElement(
+							"label",
+							{ htmlFor: "inputPassword3", className: "col-sm-12 control-label" },
+							"Password"
+						),
+						React.createElement(
+							"div",
+							{ className: "col-sm-10" },
+							React.createElement("input", { ref: "newUserPassword", type: "password", className: "form-control", id: "inputPassword3", placeholder: "Password" })
+						),
+						React.createElement("br", null),
+						React.createElement("br", null),
+						React.createElement(
+							"label",
+							{ htmlFor: "inputPassword3", className: "col-sm-12 control-label" },
+							" Confirm Password"
+						),
+						React.createElement(
+							"div",
+							{ className: "col-sm-10" },
+							React.createElement("input", { type: "password", className: "form-control", id: "inputPassword3", placeholder: "Confirm Password" })
+						)
+					),
+					React.createElement("br", null),
+					React.createElement("br", null),
+					React.createElement(
+						"div",
+						{ className: "form-group" },
+						React.createElement(
+							"div",
+							{ className: "col-sm-offset-2 col-sm-5" },
+							React.createElement(
+								"button",
+								{ type: "submit", className: "btn btn-default", onClick: this.goToBlog },
+								"Sign Up"
+							)
+						)
+					)
+				)
+			)
+		);
+	},
+	goToBlog: function goToBlog(event) {
+		event.preventDefault();
+		var newUser = new UserModel({
+			email: this.refs.newUserEmail.getDOMNode().value,
+			username: this.refs.newUsername.getDOMNode().value,
+			password: this.refs.newUserPassword.getDOMNode().value,
+			createdAt: new Date()
+		});
+
+		userCollection.add(newUser);
+
+		this.props.goTo.navigate("blog/" + this.refs.newUsername.getDOMNode().value, { trigger: true });
+	}
+
+});
+
+},{"../collections/UserCollection":162,"../models/UserModel":172,"backbone":1,"jquery":4,"react":159}],169:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
 var BlogPostForm = require("./components/BlogPostForm");
 var BlogPostCollection = require("./collections/BlogPostCollection");
 var blogPosts = new BlogPostCollection();
+var LoginFormComponent = require("./components/LoginFormComponent");
+var NewMemberSignUpComponent = require("./components/NewMemberSignUpComponent");
+var Backbone = require("backbone");
+Backbone.$ = require("jquery");
 
-React.render(React.createElement(
-	"div",
-	null,
-	React.createElement(BlogPostForm, null)
-), document.getElementById("container"));
+var App = Backbone.Router.extend({
+	routes: {
+		"": "login",
+		"newMember": "newSignUp",
+		"blog/:user": "blog"
+	},
+	login: function login() {
+		console.log("at the login page");
+		React.render(React.createElement(LoginFormComponent, { goTo: myRoutes }), document.getElementById("container"));
+	},
+	blog: function blog(user) {
+		console.log("at the blog site");
+		React.render(React.createElement(BlogPostForm, { user: user }), document.getElementById("container"));
+	},
+	newSignUp: function newSignUp() {
+		console.log("now at a new member sign up ");
+		React.render(React.createElement(NewMemberSignUpComponent, { goTo: myRoutes }), document.getElementById("container"));
+	}
+});
 
-},{"./collections/BlogPostCollection":160,"./components/BlogPostForm":162,"react":159}],167:[function(require,module,exports){
+var myRoutes = new App();
+
+Backbone.history.start();
+
+},{"./collections/BlogPostCollection":160,"./components/BlogPostForm":163,"./components/LoginFormComponent":167,"./components/NewMemberSignUpComponent":168,"backbone":1,"jquery":4,"react":159}],170:[function(require,module,exports){
 "use strict";
 
 var $ = require("jquery");
@@ -32807,7 +33055,7 @@ module.exports = Backbone.Model.extend({
 	}
 });
 
-},{"backbone":1,"jquery":4}],168:[function(require,module,exports){
+},{"backbone":1,"jquery":4}],171:[function(require,module,exports){
 "use strict";
 
 var $ = require("jquery");
@@ -32822,7 +33070,23 @@ module.exports = Backbone.Model.extend({
 	}
 });
 
-},{"backbone":1,"jquery":4}]},{},[166])
+},{"backbone":1,"jquery":4}],172:[function(require,module,exports){
+"use strict";
+
+var $ = require("jquery");
+var Backbone = require("backbone");
+Backbone.$ = $;
+
+module.exports = Backbone.Model.extend({
+	defaults: {
+		id: null,
+		email: null,
+		password: null,
+		createdAt: null
+	}
+});
+
+},{"backbone":1,"jquery":4}]},{},[169])
 
 
 //# sourceMappingURL=all.js.map
