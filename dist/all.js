@@ -32540,6 +32540,7 @@ var BlogPostList = require("./BlogPostList");
 var BlogPostCollection = require("../collections/BlogPostCollection");
 var blogPosts = new BlogPostCollection();
 var blogCount = 0;
+var myLimit = [7, 6, 5, 4, 3, 2, 1];
 
 module.exports = React.createClass({
 	displayName: "exports",
@@ -32594,7 +32595,7 @@ module.exports = React.createClass({
 			),
 			React.createElement("br", null),
 			React.createElement("br", null),
-			React.createElement(BlogPostList, { posts: blogPosts })
+			React.createElement(BlogPostList, { setLimit: myLimit, posts: blogPosts })
 		);
 	},
 	addBlogPost: function addBlogPost(event) {
@@ -32604,6 +32605,7 @@ module.exports = React.createClass({
 			title: this.refs.blogTitle.getDOMNode().value,
 			body: this.refs.blogBody.getDOMNode().value,
 			category: this.refs.blogCateogry.getDOMNode().value,
+			createdAt: new Date(),
 			postOwner: 1
 		});
 		this.newPost(blogPost);
@@ -32618,6 +32620,7 @@ module.exports = React.createClass({
 "use strict";
 
 var React = require("react");
+var _ = require("backbone/node_modules/underscore");
 var BlogPostModel = require("../models/BlogPostModel");
 var CommentForm = require("./CommentForm");
 var CommentCollection = require("../collections/CommentCollection");
@@ -32632,9 +32635,20 @@ module.exports = React.createClass({
 	componentWillMount: function componentWillMount() {
 		this.props.posts.on("add", this.postsAdded);
 	},
+	getInitialState: function getInitialState() {
+		return {
+			number: 7
+		};
+	},
 	render: function render() {
 		var that = this;
-		var blogPost = this.props.posts.map(function (postModel) {
+		var sortedModels = this.props.posts.sortBy(function (model) {
+			return -1 * model.get("createdAt").getTime();
+		});
+		var topNModels = _.first(sortedModels, this.state.number);
+
+		var blogPost = topNModels.map(function (postModel) {
+
 			return React.createElement(
 				"div",
 				{ className: "container well stretch text-center", id: postModel.get("id"), key: postModel.cid },
@@ -32652,9 +32666,23 @@ module.exports = React.createClass({
 				React.createElement(CommentList, { blogID: postModel.get("id"), comments: commentCollection })
 			);
 		});
+		var limiter = this.props.setLimit.map(function (limit) {
+			return React.createElement(
+				"option",
+				{ key: limit },
+				limit
+			);
+		});
+
 		return React.createElement(
 			"div",
 			null,
+			React.createElement(
+				"select",
+				{ ref: "limitTo", onChange: this.updateBlogList },
+				limiter
+			),
+			" Choose most recent amount of posts",
 			blogPost
 		);
 	},
@@ -32664,10 +32692,15 @@ module.exports = React.createClass({
 	postComment: function postComment(model) {
 		console.log(model);
 		commentCollection.add(model);
+	},
+	updateBlogList: function updateBlogList() {
+		this.setState({
+			number: this.refs.limitTo.getDOMNode().value
+		});
 	}
 });
 
-},{"../collections/BlogPostCollection":160,"../collections/CommentCollection":161,"../models/BlogPostModel":167,"./CommentForm":164,"./CommentList":165,"react":159}],164:[function(require,module,exports){
+},{"../collections/BlogPostCollection":160,"../collections/CommentCollection":161,"../models/BlogPostModel":167,"./CommentForm":164,"./CommentList":165,"backbone/node_modules/underscore":2,"react":159}],164:[function(require,module,exports){
 "use strict";
 
 var React = require("react");

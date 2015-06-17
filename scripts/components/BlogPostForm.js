@@ -4,6 +4,7 @@ var BlogPostList = require("./BlogPostList");
 var BlogPostCollection = require("../collections/BlogPostCollection");
 var blogPosts = new BlogPostCollection();
 var blogCount = 0;
+var myLimit = [7,6,5,4,3,2,1];
 
 module.exports = React.createClass({
 	render: function(){
@@ -20,7 +21,7 @@ module.exports = React.createClass({
 							  </select><br/><br/>
 					<button className="btn btn-primary">Post</button>
 				</form><br/><br/>
-				<BlogPostList posts={blogPosts}/>
+				<BlogPostList setLimit={myLimit} posts={blogPosts}/>
 			</div>
 			);
 	},
@@ -31,6 +32,7 @@ module.exports = React.createClass({
 			title: this.refs.blogTitle.getDOMNode().value,
 			body: this.refs.blogBody.getDOMNode().value,
 			category: this.refs.blogCateogry.getDOMNode().value,
+			createdAt: new Date(),
 			postOwner: 1,
 		});
 		this.newPost(blogPost);
@@ -40,3 +42,6 @@ module.exports = React.createClass({
 		blogPosts.add(model);
 	}
 });
+
+
+
