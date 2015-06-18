@@ -2,7 +2,16 @@ var React = require("react");
 var BlogPostModel = require("../models/BlogPostModel");
 var BlogPostList = require("./BlogPostList");
 var BlogPostCollection = require("../collections/BlogPostCollection");
-var blogPosts = new BlogPostCollection();
+var blogPosts = new BlogPostCollection([
+	{
+		id: 1,
+		title: "title",
+		body: "this.refs.blogBody.getDOMNode().value",
+		category: "thing1",
+		createdAt: new Date(),
+		postOwner: "thisGuy"
+	}
+	]);
 var blogCount = 0;
 var myLimit = [7,6,5,4,3,2,1];
 
@@ -27,13 +36,14 @@ module.exports = React.createClass({
 	},
 	addBlogPost: function(event){
 		event.preventDefault();
+		console.log("this is the collection ",blogPost)
 		var blogPost = new BlogPostModel({
 			id: blogCount,
 			title: this.refs.blogTitle.getDOMNode().value,
 			body: this.refs.blogBody.getDOMNode().value,
 			category: this.refs.blogCateogry.getDOMNode().value,
 			createdAt: new Date(),
-			postOwner: this.props.user,
+			postOwner: this.props.user
 		});
 		this.newPost(blogPost);
 		blogCount++;
